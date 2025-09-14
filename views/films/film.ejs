@@ -1,0 +1,28 @@
+<h1 class="mb-4"><%= title %></h1>
+
+<form method="post" action="<%= film ? '/films/' + film.film_id : '/films' %>">
+  <div class="mb-3">
+    <label for="title" class="form-label">Titel</label>
+    <input type="text" class="form-control" id="title" name="title" required
+      value="<%= film ? film.title : '' %>">
+  </div>
+
+  <div class="mb-3">
+    <label for="release_year" class="form-label">Jaar</label>
+    <input type="number" class="form-control" id="release_year" name="release_year" required
+      value="<%= film ? film.release_year : '' %>">
+  </div>
+
+  <div class="mb-3">
+    <label for="description" class="form-label">Beschrijving</label>
+    <textarea class="form-control" id="description" name="description" rows="4"><%= film ? film.description : '' %></textarea>
+  </div>
+
+  <% if (film) { %>
+    <button type="submit" class="btn btn-warning">Opslaan</button>
+  <% } else { %>
+    <button type="submit" class="btn btn-success">Toevoegen</button>
+  <% } %>
+
+  <a href="/films" class="btn btn-secondary">Annuleer</a>
+</form>

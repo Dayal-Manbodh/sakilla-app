@@ -1,2 +1,50 @@
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
+<!-- Hero section -->
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+  <div class="container-fluid py-5">
+    <h1 class="display-4 fw-bold"><%= title %></h1>
+    <p class="col-md-8 fs-5">
+      Welcome to <%= title %> 🎬 — een demo applicatie gebouwd met Express, EJS en de Sakila database.
+    </p>
+    <a href="/films" class="btn btn-primary btn-lg me-2">Bekijk Films</a>
+    <a href="/customers" class="btn btn-outline-primary btn-lg">Bekijk Klanten</a>
+  </div>
+</div>
+
+<!-- Features section -->
+<div class="row text-center">
+  <div class="col-md-4">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Films</h5>
+        <p class="card-text">Bekijk alle films uit de Sakila database en ontdek details per film.</p>
+        <a href="/films" class="btn btn-outline-primary">Naar films</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Klanten</h5>
+        <p class="card-text">Bekijk klanten, beheer gegevens en bekijk hun huurgeschiedenis.</p>
+        <a href="/customers" class="btn btn-outline-primary">Naar klanten</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Over dit project</h5>
+        <p class="card-text">Gebouwd met Node.js, Express, EJS, Bootstrap en de Sakila voorbeeld-database.</p>
+        <a href="#" class="btn btn-outline-secondary disabled">Meer info</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Extra info / Call-to-action section -->
+<div class="p-5 mt-4 bg-light rounded-3 shadow-sm text-center">
+  <h2>Wat je kunt doen</h2>
+  <p class="col-md-8 mx-auto fs-5">
+    Beheer films, klanten en huurtransacties met een gebruiksvriendelijke interface. 
+  </p>
+</div>

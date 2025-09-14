@@ -1,3 +1,8 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<h1 class="text-danger">Fout: <%= title || "Onbekende fout" %></h1>
+<p><%= message %></p>
+
+<% if (error && Object.keys(error).length) { %>
+  <pre><%= error.stack %></pre>
+<% } %>
+
+<a href="/" class="btn btn-primary mt-3">Terug naar Home</a>

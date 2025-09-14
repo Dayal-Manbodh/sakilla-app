@@ -1,0 +1,47 @@
+<h1 class="mb-4"><%= title %></h1>
+
+<form method="post" action="<%= film ? '/films/' + film.film_id : '/films' %>" class="mt-3">
+
+  <div class="mb-3">
+    <label for="title" class="form-label">Titel</label>
+    <input type="text" class="form-control" id="title" name="title" 
+      value="<%= film ? film.title : '' %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="description" class="form-label">Beschrijving</label>
+    <textarea class="form-control" id="description" name="description" rows="4">
+      <%= film ? film.description : '' %>
+    </textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="release_year" class="form-label">Release Jaar</label>
+    <input type="number" class="form-control" id="release_year" name="release_year" 
+      value="<%= film ? film.release_year : '' %>">
+  </div>
+
+  <div class="mb-3">
+    <label for="language_id" class="form-label">Taal</label>
+    <select class="form-select" id="language_id" name="language_id" required>
+      <option value="">-- Kies een taal --</option>
+      <% languages.forEach(lang => { %>
+        <option value="<%= lang.language_id %>" 
+          <%= film && film.language_id === lang.language_id ? "selected" : "" %>>
+          <%= lang.name %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <button type="submit" class="btn <%= film ? 'btn-warning' : 'btn-success' %>">
+    <%= film ? 'Opslaan' : 'Toevoegen' %>
+  </button>
+  <a href="/films" class="btn btn-secondary">Annuleer</a>
+
+  <% if (film) { %>
+    <form method="post" action="/films/<%= film.film_id %>/delete" class="d-inline">
+      <button type="submit" class="btn btn-danger">Verwijder</button>
+    </form>
+  <% } %>
+</form>

@@ -1,0 +1,15 @@
+<h1>Klantdetails</h1>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h5 class="card-title"><%= customer.first_name %> <%= customer.last_name %></h5>
+    <p class="card-text"><strong>Email:</strong> <%= customer.email %></p>
+    <p class="card-text"><strong>Actief:</strong> <%= customer.active ? "Ja" : "Nee" %></p>
+
+    <a href="/customers/<%= customer.customer_id %>/edit" class="btn btn-warning">Bewerken</a>
+    <form action="/customers/<%= customer.customer_id %>/delete" method="post" class="d-inline">
+      <button type="submit" class="btn btn-danger">Verwijderen</button>
+    </form>
+    <a href="/customers" class="btn btn-secondary">Terug</a>
+  </div>
+</div>
