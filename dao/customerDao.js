@@ -1,4 +1,4 @@
-const db = require("../db/connection"); // jouw MySQL verbinding
+const db = require("../db/connection");
 
 class CustomerDao {
   getAll(callback) {

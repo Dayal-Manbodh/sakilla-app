@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const customerService = require("../services/customerService");
+const { isLoggedIn } = require("../middleware/auth");
 
 // READ all
-router.get("/", (req, res, next) => {
+router.get("/", isLoggedIn, (req, res, next) => {
   customerService.listCustomers((err, customers) => {
     if (err) return next(err);
     res.render("customers/customers", {

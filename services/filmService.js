@@ -17,19 +17,23 @@ class FilmService {
     filmDao.updateFilm(id, film, callback);
   }
 
-  deleteFilm(id, callback) {
-    filmDao.deleteFilm(id, callback);
+  deleteFilm(filmId, callback) {
+    filmDao.deleteFilm(filmId, callback);
   }
 
-  checkAvailability(filmId, callback) {
-    filmDao.checkAvailability(filmId, callback);
+  checkAvailability(id, callback) {
+    filmDao.checkAvailability(id, callback);
   }
 
   listFilmsWithAvailability(callback) {
     filmDao.listFilmsWithAvailability(callback);
   }
 
-  listLanguages(callback) {
+  getAvailableFilms(callback) {
+    filmDao.getAvailableFilms(callback);
+  }
+
+  getLanguages(callback) {
     filmDao.getAllLanguages(callback);
   }
 }

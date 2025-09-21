@@ -1,0 +1,32 @@
+<h1 class="text-center mb-4"><%= title %></h1>
+
+<div class="d-flex justify-content-center">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
+    
+    <% if (messages && messages.error && messages.error.length) { %>
+      <div class="alert alert-danger">
+        <% messages.error.forEach(err => { %>
+          <div><%= err %></div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <form method="post" action="/auth/login">
+      <div class="mb-3">
+        <label for="username" class="form-label">Gebruikersnaam</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Vul je gebruikersnaam in" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Wachtwoord</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Vul je wachtwoord in" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+
+    <p class="mt-3 text-center">
+      Nog geen account? <a href="/auth/register">Registreren</a>
+    </p>
+  </div>
+</div>

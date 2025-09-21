@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const filmService = require("../services/filmService");
+const { isLoggedIn } = require("../middleware/auth");
 
 // CREATE form - Nieuwe Film
 router.get("/new", (req, res, next) => {
-  filmService.listLanguages((err, languages) => {
+  filmService.getLanguages((err, languages) => {
     if (err) return next(err);
     res.render("films/film_form", {
       title: "Nieuwe Film",
@@ -29,7 +30,7 @@ router.get("/:id/edit", (req, res, next) => {
     if (err) return next(err);
     if (!film) return res.status(404).send("Film not found");
 
-    filmService.listLanguages((err, languages) => {
+    filmService.getLanguages((err, languages) => {
       if (err) return next(err);
       res.render("films/film_form", {
         title: "Film Bewerken",
@@ -51,14 +52,19 @@ router.post("/:id", (req, res, next) => {
 
 // DELETE film
 router.post("/:id/delete", (req, res, next) => {
-  filmService.deleteFilm(req.params.id, (err) => {
-    if (err) return next(err);
+  const filmId = req.params.id;
+
+  filmService.deleteFilm(filmId, (err) => {
+    if (err) {
+      // optioneel: log de fout voor debugging
+      console.error("Fout bij verwijderen film:", err.message);
+      return next(err);
+    }
     res.redirect("/films");
   });
 });
-
 // READ all films (lijst)
-router.get("/", (req, res, next) => {
+router.get("/", isLoggedIn, (req, res, next) => {
   const searchQuery = req.query.q || "";
   filmService.listFilmsWithAvailability((err, films) => {
     if (err) return next(err);
@@ -87,7 +93,7 @@ router.get("/", (req, res, next) => {
   });
 });
 
-// READ one film (detailpagina) - laatste
+// READ one film (detailpagina)
 router.get("/:id", (req, res, next) => {
   filmService.getFilm(req.params.id, (err, film) => {
     if (err) return next(err);
