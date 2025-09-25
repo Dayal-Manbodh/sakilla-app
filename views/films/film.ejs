@@ -1,23 +1,112 @@
-<div class="card shadow-sm mb-4">
-  <div class="card-body">
-    <h1 class="card-title"><%= film.title %></h1>
-    <p class="card-text"><strong>Jaar:</strong> <%= film.release_year %></p>
-    <p class="card-text"><strong>Taal:</strong> <%= film.language_name %></p>
-    <p class="card-text"><strong>Beschrijving:</strong> <%= film.description %></p>
+<div class="card mb-4 shadow-lg border-0 rounded-3">
+  <div class="card-body p-4">
 
-    <p>
-      <strong>Beschikbaarheid:</strong> 
-      <% if (available) { %>
-        <span class="text-success">Beschikbaar</span>
-      <% } else { %>
-        <span class="text-danger">Uitverkocht</span>
-      <% } %>
+    <!-- Titel + Rating -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="card-title mb-0"><%= film.title %></h1>
+      <span class="badge bg-dark fs-6"><%= film.rating %></span>
+    </div>
+    <p class="text-muted mb-1">
+      📅 <%= film.release_year %> | 🌐 <%= film.language_name %>
     </p>
 
-    <a href="/films/<%= film.film_id %>/edit" class="btn btn-warning me-2">Bewerk</a>
-    <form method="post" action="/films/<%= film.film_id %>/delete" style="display:inline" class="delete-form d-inline">
-      <button type="submit" class="btn btn-danger me-2">Verwijder</button>
-    </form>
-    <a href="/films" class="btn btn-secondary">Terug naar films</a>
+    <!-- Beschrijving -->
+    <div class="mb-4">
+      <h5>Beschrijving</h5>
+      <blockquote class="blockquote ps-3 border-start border-3">
+        <p><%= film.description %></p>
+      </blockquote>
+    </div>
+
+    <!-- Extra info in cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card text-center shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="text-muted">Lengte</h6>
+            <p class="fs-5 fw-bold"><%= film.length %> min</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="text-muted">Huurprijs</h6>
+            <p class="fs-5 fw-bold">€<%= film.rental_rate %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="text-muted">Huurduur</h6>
+            <p class="fs-5 fw-bold"><%= film.rental_duration %> dagen</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="text-muted">Vervangingskost</h6>
+            <p class="fs-5 fw-bold">€<%= film.replacement_cost %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acteurs -->
+    <div class="mb-4">
+      <h5>Acteurs</h5>
+      <div>
+        <% actors.forEach(actor => { %>
+          <span class="badge rounded-pill bg-primary me-1 mb-1">
+            <%= actor.first_name %> <%= actor.last_name %>
+          </span>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Categorieën -->
+    <div class="mb-4">
+      <h5>Categorieën</h5>
+      <div>
+        <% categories.forEach(cat => { %>
+          <span class="badge rounded-pill bg-secondary me-1 mb-1">
+            <%= cat.name %>
+          </span>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Voorraad per winkel -->
+    <div class="mb-4">
+      <h5>Voorraad per winkel</h5>
+      <div class="accordion" id="storesAccordion">
+        <% stores.forEach((store, index) => { %>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading<%= index %>">
+              <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapse<%= index %>">
+                🏬 Winkel: <%= store.address %>
+              </button>
+            </h2>
+            <div id="collapse<%= index %>" class="accordion-collapse collapse"
+              data-bs-parent="#storesAccordion">
+              <div class="accordion-body">
+                <p><strong>Beschikbare kopieën:</strong> <%= store.available_copies %></p>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Actieknoppen -->
+    <div class="d-flex justify-content-end">
+      <a href="/films/<%= film.film_id %>/edit" class="btn btn-warning me-2">Bewerken</a>
+      <a href="/films" class="btn btn-secondary">Terug naar films</a>
+    </div>
+
   </div>
 </div>

@@ -22,10 +22,4 @@
 
   <button type="submit" class="btn btn-primary">Opslaan</button>
   <a href="/customers" class="btn btn-secondary">Annuleren</a>
-
-  <% if (customer) { %>
-    <form method="post" action="/customers/<%= customer.customer_id %>/delete" class="d-inline">
-      <button type="submit" class="btn btn-danger">Verwijder</button>
-    </form>
-  <% } %>
 </form>

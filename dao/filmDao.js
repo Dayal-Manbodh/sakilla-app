@@ -26,6 +26,62 @@ class FilmDao {
     });
   }
 
+  getFilmDetails(filmId, callback) {
+    const filmQuery = `
+    SELECT f.film_id, f.title, f.release_year, f.description, 
+       f.length, f.rental_rate, f.rental_duration, f.replacement_cost, f.rating, 
+       l.name as language_name
+FROM film f
+JOIN language l ON f.language_id = l.language_id
+WHERE f.film_id = ?;
+  `;
+
+    db.query(filmQuery, [filmId], (err, filmRows) => {
+      if (err) return callback(err);
+      const film = filmRows[0];
+
+      const actorsQuery = `
+      SELECT a.first_name, a.last_name
+      FROM actor a
+      JOIN film_actor fa ON a.actor_id = fa.actor_id
+      WHERE fa.film_id = ?;
+    `;
+      db.query(actorsQuery, [filmId], (err, actors) => {
+        if (err) return callback(err);
+
+        const categoriesQuery = `
+        SELECT c.name
+        FROM category c
+        JOIN film_category fc ON c.category_id = fc.category_id
+        WHERE fc.film_id = ?;
+      `;
+        db.query(categoriesQuery, [filmId], (err, categories) => {
+          if (err) return callback(err);
+
+          const storesQuery = `
+          SELECT a.address, i.inventory_id,
+       (i.inventory_id - IFNULL(r.rented_count,0)) AS available_copies
+          FROM inventory i
+          JOIN store s ON i.store_id = s.store_id
+          JOIN address a ON s.address_id = a.address_id
+          LEFT JOIN (
+              SELECT inventory_id, COUNT(*) AS rented_count
+              FROM rental
+              WHERE return_date IS NULL
+              GROUP BY inventory_id
+          ) r ON i.inventory_id = r.inventory_id
+          WHERE i.film_id = ?;
+        `;
+          db.query(storesQuery, [filmId], (err, stores) => {
+            if (err) return callback(err);
+
+            callback(null, { film, actors, categories, stores });
+          });
+        });
+      });
+    });
+  }
+
   // Maak een nieuwe film
   createFilm(film, callback) {
     const {
@@ -33,17 +89,18 @@ class FilmDao {
       description,
       release_year,
       language_id,
-      rental_duration = 3,
-      rental_rate = 4.99,
-      length = null,
-      replacement_cost = 19.99,
-      rating = "G",
+      rental_duration,
+      rental_rate,
+      length,
+      replacement_cost,
+      rating,
     } = film;
 
     const sql = `
-      INSERT INTO film 
-        (title, description, release_year, language_id, rental_duration, rental_rate, length, replacement_cost, rating)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  INSERT INTO film 
+    (title, description, release_year, language_id, rental_duration, rental_rate, length, replacement_cost, rating)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+`;
 
     db.query(
       sql,

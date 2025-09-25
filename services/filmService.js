@@ -9,6 +9,10 @@ class FilmService {
     filmDao.getFilmById(id, callback);
   }
 
+  getFilmDetails(filmId, callback) {
+    filmDao.getFilmDetails(filmId, callback);
+  }
+
   createFilm(film, callback) {
     filmDao.createFilm(film, callback);
   }

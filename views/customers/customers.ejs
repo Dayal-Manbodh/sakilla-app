@@ -20,7 +20,7 @@
         <td>
           <a href="/customers/<%= c.customer_id %>" class="btn btn-sm btn-primary">Details</a>
           <a href="/customers/<%= c.customer_id %>/edit" class="btn btn-sm btn-warning">Bewerken</a>
-          <form action="/customers/<%= c.customer_id %>/delete" method="post" class="d-inline">
+          <form action="/customers/<%= c.customer_id %>/delete" method="post" class="d-inline delete-form">
             <button type="submit" class="btn btn-sm btn-danger">Verwijderen</button>
           </form>
         </td>
