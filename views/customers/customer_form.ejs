@@ -1,25 +1,63 @@
-<h1><%= title %></h1>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white">
+          <h3 class="mb-0">
+            👤 <%= title %>
+          </h3>
+        </div>
 
-<form method="post" action="<%= customer ? '/customers/' + customer.customer_id : '/customers' %>" class="mt-3">
+        <div class="card-body">
+          <form method="post" action="<%= customer ? '/customers/' + customer.customer_id : '/customers' %>">
+            
+            <!-- Voornaam & Achternaam -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="first_name" class="form-label fw-semibold">Voornaam</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="first_name" 
+                  name="first_name" 
+                  placeholder="Voornaam invullen..."
+                  value="<%= customer ? customer.first_name : '' %>" 
+                  required>
+              </div>
 
-  <div class="mb-3">
-    <label for="first_name" class="form-label">Voornaam</label>
-    <input type="text" class="form-control" id="first_name" name="first_name" 
-           value="<%= customer ? customer.first_name : '' %>" required>
+              <div class="col-md-6 mb-3">
+                <label for="last_name" class="form-label fw-semibold">Achternaam</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="last_name" 
+                  name="last_name" 
+                  placeholder="Achternaam invullen..."
+                  value="<%= customer ? customer.last_name : '' %>" 
+                  required>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-4">
+              <label for="email" class="form-label fw-semibold">E-mail</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                name="email" 
+                placeholder="bijv. klant@voorbeeld.com"
+                value="<%= customer ? customer.email : '' %>">
+            </div>
+
+            <!-- Knoppen -->
+            <div class="d-flex justify-content-end">
+              <a href="/customers" class="btn btn-outline-secondary me-2">Annuleer</a>
+              <button type="submit" class="btn btn-success">Opslaan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="mb-3">
-    <label for="last_name" class="form-label">Achternaam</label>
-    <input type="text" class="form-control" id="last_name" name="last_name" 
-           value="<%= customer ? customer.last_name : '' %>" required>
-  </div>
-
-  <div class="mb-3">
-    <label for="email" class="form-label">E-mail</label>
-    <input type="email" class="form-control" id="email" name="email" 
-           value="<%= customer ? customer.email : '' %>">
-  </div>
-
-  <button type="submit" class="btn btn-primary">Opslaan</button>
-  <a href="/customers" class="btn btn-secondary">Annuleren</a>
-</form>
+</div>

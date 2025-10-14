@@ -1,26 +1,50 @@
-<h1><%= title %></h1>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-dark text-white">
+          <h3 class="mb-0"><%= title %></h3>
+        </div>
+        <div class="card-body">
 
-<form method="post" action="/rentals" class="mt-3">
+          <form method="post" action="/rentals">
+            
+            <!-- Film select -->
+            <div class="mb-3">
+              <label for="film_id" class="form-label">Film</label>
+              <select class="form-select" id="film_id" name="film_id" required>
+                <option value="">-- Kies een film --</option>
+                <% films.forEach(film => { %>
+                  <option value="<%= film.film_id %>">
+                    <%= film.title %> (<%= film.available_count %> beschikbaar)
+                  </option>
+                <% }) %>
+              </select>
+            </div>
 
-  <div class="mb-3">
-    <label for="film_id" class="form-label">Film</label>
-    <select class="form-select" id="film_id" name="film_id" required>
-      <% films.forEach(film => { %>
-        <option value="<%= film.film_id %>"><%= film.title %> (<%= film.available_count %> beschikbaar)</option>
-      <% }) %>
-    </select>
+            <!-- Customer select -->
+            <div class="mb-3">
+              <label for="customer_id" class="form-label">Klant</label>
+              <select class="form-select" id="customer_id" name="customer_id" required>
+                <option value="">-- Kies een klant --</option>
+                <% customers.forEach(customer => { %>
+                  <option value="<%= customer.customer_id %>">
+                    <%= customer.first_name %> <%= customer.last_name %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-end">
+              <a href="/rentals" class="btn btn-outline-secondary me-2">Annuleer</a>
+              <button type="submit" class="btn btn-success">Verhuur aanmaken</button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="mb-3">
-    <label for="customer_id" class="form-label">Klant</label>
-    <select class="form-select" id="customer_id" name="customer_id" required>
-      <% customers.forEach(customer => { %>
-        <option value="<%= customer.customer_id %>"><%= customer.first_name %> <%= customer.last_name %></option>
-      <% }) %>
-    </select>
-  </div>
-
-  <button type="submit" class="btn btn-primary">Verhuur aanmaken</button>
-  <a href="/rentals" class="btn btn-secondary">Annuleer</a>
-
-</form>
+</div>

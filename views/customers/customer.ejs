@@ -1,12 +1,96 @@
-<h1>Klantdetails</h1>
+<div class="card mb-4 shadow-lg border-0 rounded-3">
+  <div class="card-body p-4">
 
-<div class="card shadow-sm mb-4">
-  <div class="card-body">
-    <h5 class="card-title"><%= customer.first_name %> <%= customer.last_name %></h5>
-    <p class="card-text"><strong>Email:</strong> <%= customer.email %></p>
-    <p class="card-text"><strong>Actief:</strong> <%= customer.active ? "Ja" : "Nee" %></p>
+    <!-- Titel -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="card-title mb-0">
+        👤 <%= customer.first_name %> <%= customer.last_name %>
+      </h1>
+      <span class="badge <%= customer.active ? 'bg-success' : 'bg-danger' %> fs-6">
+        <%= customer.active ? "Actief" : "Inactief" %>
+      </span>
+    </div>
 
-    <a href="/customers/<%= customer.customer_id %>/edit" class="btn btn-warning">Bewerken</a>
-    <a href="/customers" class="btn btn-secondary">Terug</a>
+    <p class="text-muted mb-4">
+      📧 <%= customer.email %>
+    </p>
+
+    <!-- Extra info in kaarten -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="text-muted">Klantnummer</h6>
+            <p class="fs-5 fw-bold"><%= customer.customer_id %></p>
+          </div>
+        </div>
+      </div>
+      <% if (customer.store_name) { %>
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="text-muted">Winkel</h6>
+            <p class="fs-5 fw-bold"><%= customer.store_name %></p>
+          </div>
+        </div>
+      </div>
+      <% } %>
+      <% if (customer.create_date) { %>
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm border-0">
+          <div class="card-body">
+            <h6 class="text-muted">Aangemaakt op</h6>
+            <p class="fs-5 fw-bold"><%= new Date(customer.create_date).toLocaleDateString('nl-NL') %></p>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Adres -->
+    <% if (customer.address) { %>
+    <div class="mb-4">
+      <h5>Adres</h5>
+      <blockquote class="blockquote ps-3 border-start border-3">
+        <p>
+          <%= customer.address %><br>
+          <%= customer.city ? customer.city + ', ' : '' %>
+          <%= customer.postal_code ? customer.postal_code : '' %><br>
+          <%= customer.country ? customer.country : '' %>
+        </p>
+      </blockquote>
+    </div>
+    <% } %>
+
+    <!-- Huurgeschiedenis -->
+    <% if (rentals && rentals.length > 0) { %>
+    <div class="mb-4">
+      <h5>🎞️ Huurgeschiedenis</h5>
+      <ul class="list-group list-group-flush">
+        <% rentals.forEach(rental => { %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+              <strong><%= rental.film_title %></strong> — 
+              <small><%= new Date(rental.rental_date).toLocaleDateString('nl-NL') %></small>
+            </span>
+            <% if (rental.return_date) { %>
+              <span class="badge bg-success">Ingeleverd</span>
+            <% } else { %>
+              <span class="badge bg-warning text-dark">Nog niet terug</span>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+    <% } else { %>
+      <p class="text-muted">Geen huurgeschiedenis gevonden 📭</p>
+    <% } %>
+
+    <!-- Actieknoppen -->
+    <div class="d-flex justify-content-end mt-3">
+      <a href="/customers/<%= customer.customer_id %>/edit" class="btn btn-warning me-2">Bewerken</a>
+      <a href="/customers" class="btn btn-secondary">Terug naar klanten</a>
+    </div>
+
   </div>
 </div>

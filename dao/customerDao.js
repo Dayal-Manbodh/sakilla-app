@@ -11,10 +11,48 @@ class CustomerDao {
   }
 
   getById(id, callback) {
-    const sql = "SELECT * FROM customer WHERE customer_id = ?";
-    db.query(sql, [id], (err, results) => {
+    const customerSql = `
+    SELECT 
+      c.*, 
+      s.store_id, 
+      a.address, 
+      ci.city, 
+      co.country
+    FROM customer c
+    JOIN store s ON c.store_id = s.store_id
+    JOIN address a ON c.address_id = a.address_id
+    JOIN city ci ON a.city_id = ci.city_id
+    JOIN country co ON ci.country_id = co.country_id
+    WHERE c.customer_id = ?;
+  `;
+
+    const rentalsSql = `
+    SELECT 
+      r.rental_id,
+      r.rental_date,
+      r.return_date,
+      f.title AS film_title
+    FROM rental r
+    JOIN inventory i ON r.inventory_id = i.inventory_id
+    JOIN film f ON i.film_id = f.film_id
+    WHERE r.customer_id = ?
+    ORDER BY r.rental_date DESC
+    LIMIT 10;
+  `;
+
+    // Eerst klant ophalen
+    db.query(customerSql, [id], (err, customerResult) => {
       if (err) return callback(err);
-      callback(null, results[0]);
+      if (customerResult.length === 0) return callback(null, null);
+
+      const customer = customerResult[0];
+
+      // Dan huurgeschiedenis ophalen
+      db.query(rentalsSql, [id], (err, rentalResults) => {
+        if (err) return callback(err);
+        // Callback geeft een object terug met beide resultaten
+        callback(null, { customer, rentals: rentalResults });
+      });
     });
   }
 

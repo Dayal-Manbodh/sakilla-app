@@ -1,7 +1,7 @@
 // controllers/customerController.js
 const customerService = require("../services/customerService");
 
-// READ all
+// ✅ ALLE KLANTEN
 exports.list = (req, res, next) => {
   customerService.listCustomers((err, customers) => {
     if (err) return next(err);
@@ -13,21 +13,25 @@ exports.list = (req, res, next) => {
   });
 };
 
-// READ one
+// ✅ KLANTDETAILS (inclusief huurgeschiedenis)
 exports.detail = (req, res, next) => {
-  customerService.getCustomer(req.params.id, (err, customer) => {
+  const id = req.params.id;
+
+  customerService.getCustomer(id, (err, data) => {
     if (err) return next(err);
-    if (!customer) return res.status(404).send("Klant niet gevonden");
+    if (!data) return res.status(404).send("Klant niet gevonden");
+
     res.render("customers/customer", {
-      title: "Klant details",
-      customer,
+      title: "Klantdetails",
+      customer: data.customer, // klantinfo
+      rentals: data.rentals || [], // huurgeschiedenis
       layout: "layout",
     });
   });
 };
 
-// CREATE form - nieuwe klant
-exports.newForm = (req, res, next) => {
+// ✅ FORMULIER VOOR NIEUWE KLANT
+exports.newForm = (req, res) => {
   res.render("customers/customer_form", {
     title: "Nieuwe Klant",
     customer: null,
@@ -35,38 +39,45 @@ exports.newForm = (req, res, next) => {
   });
 };
 
-// CREATE submit
+// ✅ NIEUWE KLANT OPSLAAN
 exports.create = (req, res, next) => {
   customerService.createCustomer(req.body, (err, id) => {
     if (err) return next(err);
-    res.redirect("/customers/" + id);
+    res.redirect(`/customers/${id}`);
   });
 };
 
-// UPDATE form
+// ✅ FORMULIER VOOR BEWERKEN
 exports.editForm = (req, res, next) => {
-  customerService.getCustomer(req.params.id, (err, customer) => {
+  const id = req.params.id;
+
+  customerService.getCustomer(id, (err, data) => {
     if (err) return next(err);
-    if (!customer) return res.status(404).send("Klant niet gevonden");
+    if (!data) return res.status(404).send("Klant niet gevonden");
+
     res.render("customers/customer_form", {
       title: "Klant Bewerken",
-      customer,
+      customer: data.customer, // enkel klantinfo
       layout: "layout",
     });
   });
 };
 
-// UPDATE submit
+// ✅ BEWERKING OPSLAAN
 exports.update = (req, res, next) => {
-  customerService.updateCustomer(req.params.id, req.body, (err) => {
+  const id = req.params.id;
+
+  customerService.updateCustomer(id, req.body, (err) => {
     if (err) return next(err);
-    res.redirect("/customers/" + req.params.id);
+    res.redirect(`/customers/${id}`);
   });
 };
 
-// DELETE
+// ✅ KLANT VERWIJDEREN
 exports.delete = (req, res, next) => {
-  customerService.deleteCustomer(req.params.id, (err) => {
+  const id = req.params.id;
+
+  customerService.deleteCustomer(id, (err) => {
     if (err) return next(err);
     res.redirect("/customers");
   });

@@ -1,42 +1,63 @@
-<h1 class="mb-4"><%= title %></h1>
+<h1 class="mb-4">
+  🎬 Verhuur overzicht
+  <small class="text-muted d-block fs-6">Beheer al je filmverhuur</small>
+</h1>
 
-<a href="/rentals/new" class="btn btn-success mb-3">+ Nieuwe Verhuur</a>
+<!-- Knop voor nieuwe verhuur -->
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body bg-light rounded d-flex justify-content-between align-items-center flex-wrap">
+      <a href="/rentals/new" class="btn btn-success" data-cy="add-rental">➕ Nieuwe Verhuur</a>
+  </div>
+</div>
 
-<table class="table table-striped table-hover align-middle">
-  <thead class="table-dark">
-    <tr>
-      <th>ID</th>
-      <th>Film</th>
-      <th>Klant</th>
-      <th>Verhuurd op</th>
-      <th>Teruggebracht op</th>
-      <th>Acties</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% rentals.forEach(rental => { %>
-      <tr>
-        <td><%= rental.rental_id %></td>
-        <td><%= rental.film_title %></td>
-        <td><%= rental.first_name %> <%= rental.last_name %></td>
-        <td><%= new Date(rental.rental_date).toLocaleString() %></td>
-        <td>
-          <% if (rental.return_date) { %>
-            <span class="text-success"><%= new Date(rental.return_date).toLocaleString() %></span>
-          <% } else { %>
-            <span class="text-danger fw-bold">Nog niet terug</span>
-          <% } %>
-        </td>
-        <td>
-          <% if (!rental.return_date) { %>
-            <form method="post" action="/rentals/<%= rental.rental_id %>/close" class="d-inline">
-              <button type="submit" class="btn btn-sm btn-success">Terugbrengen</button>
-            </form>
-          <% } else { %>
-            <span class="badge bg-secondary">Afgerond</span>
-          <% } %>
-        </td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+<!-- Tabel in card -->
+<div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+  <div class="card-body p-0">
+    <table class="table table-hover align-middle mb-0" data-cy="rentals-table">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Film</th>
+          <th>Klant</th>
+          <th>Verhuurd op</th>
+          <th>Teruggebracht op</th>
+          <th class="text-end">Acties</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (rentals.length === 0) { %>
+          <tr>
+            <td colspan="6" class="text-center py-4 text-muted">
+              Geen verhuurrecords gevonden 📭
+            </td>
+          </tr>
+        <% } %>
+
+        <% rentals.forEach(rental => { %>
+          <tr>
+            <td><%= rental.rental_id %></td>
+            <td><%= rental.film_title %></td>
+            <td><%= rental.first_name %> <%= rental.last_name %></td>
+            <td><%= new Date(rental.rental_date).toLocaleString() %></td>
+            <td>
+              <% if (rental.return_date) { %>
+                <span class="text-success"><%= new Date(rental.return_date).toLocaleString() %></span>
+              <% } else { %>
+                <span class="text-danger fw-bold">Nog niet terug</span>
+              <% } %>
+            </td>
+            <td class="text-end">
+              <% if (!rental.return_date) { %>
+                <form method="post" action="/rentals/<%= rental.rental_id %>/close" class="d-inline">
+                  <button type="submit" class="btn btn-sm btn-success">Terugbrengen</button>
+                </form>
+              <% } else { %>
+                <span class="badge bg-secondary">Afgerond</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
